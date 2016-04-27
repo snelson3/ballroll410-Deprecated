@@ -56,11 +56,6 @@ public class GameController : MonoBehaviour {
     {
         morselCount++;
         UpdateUI();
-
-        if(morselCount == totalMorsels)
-        {
-            StartCoroutine(LevelComplete());
-        }
     }
 
     [SerializeField]
@@ -68,6 +63,12 @@ public class GameController : MonoBehaviour {
     {
         Destroy(player.gameObject);
         StartCoroutine(GameOver());
+    }
+
+    [SerializeField]
+    public void ExitReached()
+    {
+        StartCoroutine(LevelComplete());
     }
 
     IEnumerator GameOver()
