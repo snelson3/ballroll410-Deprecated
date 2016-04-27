@@ -11,6 +11,7 @@ public class GameController : MonoBehaviour {
     public float start_z;
     public Text morselText;
     public Text gameOverText;
+    public int minMorsels;
 
     private int totalMorsels;
     private int morselCount;
@@ -20,13 +21,14 @@ public class GameController : MonoBehaviour {
     void Start()
     {
         morselCount = 0;
-        totalMorsels = GameObject.FindGameObjectsWithTag("Morsel").Length;
+        totalMorsels = GameObject.FindGameObjectsWithTag("Morsels").Length;
+        minMorsels = Mathf.Clamp(minMorsels, 0, totalMorsels);
         gameOver = false;
         player = Instantiate(player, new Vector3(start_x, start_y, start_z), player.transform.rotation) as GameObject;
         cam = GameObject.FindGameObjectWithTag("MainCamera");
         cam.GetComponent<CameraController>().SetPlayer(player);
         UpdateUI();
-        gameOverText.text = "";
+        StartCoroutine(StartLevelMessage());
     }
 
     void Update()
@@ -68,7 +70,17 @@ public class GameController : MonoBehaviour {
     [SerializeField]
     public void ExitReached()
     {
-        StartCoroutine(LevelComplete());
+        if (morselCount >= minMorsels)
+        {
+            StartCoroutine(LevelComplete());
+        }
+    }
+
+    IEnumerator StartLevelMessage()
+    {
+        gameOverText.text = string.Format("Level Goal: {0}/{1} Morsels", minMorsels, totalMorsels);
+        yield return new WaitForSeconds(3);
+        gameOverText.text = "";
     }
 
     IEnumerator GameOver()
