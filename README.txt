@@ -16,10 +16,12 @@ layer.GetComponent<PlayerController>().SetSpeed(2 * PlayerController.GetSpeed())
 GameController:
 AddMorsel() - Used for incrementing the morsel count for the level.
 PlayerDestroy() - Used for handling player death event. Used by level boundary box script and any player-killing level structures.
+ExitReached() - Used for telling the game manager to end the level.
 
 Example uses:
 gc.GetComponent<GameController>().PlayerDestroy();
 gc.GetComponent<GameController>().AddMorsel(); //upon entering a morsel's collider.
+gc.GetComponent<GameController>().ExitReached(); //upon entering the game exit.
 
 
 
