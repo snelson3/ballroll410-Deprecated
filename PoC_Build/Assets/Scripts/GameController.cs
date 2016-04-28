@@ -21,13 +21,13 @@ public class GameController : MonoBehaviour {
     void Start()
     {
         morselCount = 0;
-        totalMorsels = GameObject.FindGameObjectsWithTag("Morsels").Length;
+        totalMorsels = GameObject.FindGameObjectsWithTag("Morsel").Length;
+        morselText.text = string.Format("{0}/{1} Morsels", morselCount, totalMorsels);
         minMorsels = Mathf.Clamp(minMorsels, 0, totalMorsels);
         gameOver = false;
         player = Instantiate(player, new Vector3(start_x, start_y, start_z), player.transform.rotation) as GameObject;
         cam = GameObject.FindGameObjectWithTag("MainCamera");
         cam.GetComponent<CameraController>().SetPlayer(player);
-        UpdateUI();
         StartCoroutine(StartLevelMessage());
     }
 
