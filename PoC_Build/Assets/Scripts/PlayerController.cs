@@ -5,21 +5,47 @@ using System.Collections;
 public class PlayerController : MonoBehaviour {
 
 	public float speed;
+	public float jump; //how long in seconds to jump
+	public float jumpScale; //How high to jump every second
 
 	private Rigidbody rb;
     private GameController game;
+
+	private bool isJumping;
+	private float jumpStart, jumpEnd;
 
 	void Start ()
 	{
 		rb = GetComponent<Rigidbody>();
         game = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();       //I can't figure out how to instatiate an instance of GameController
-
+		isJumping=false;
     }
 
 	void FixedUpdate ()
 	{
 		float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
+		float moveHeight;
+
+		if (!isJumping && Input.GetKeyDown ("space"))
+		{
+			isJumping = true;
+			jumpStart = Time.time;
+			jumpEnd = Time.time + jump;
+		}
+
+		if (isJumping) {
+			//check that the alloted time hasn't passed
+			if (Time.time < jumpEnd) {
+				moveHeight = jumpScale;
+			} else 
+			{
+				moveHeight = jumpScale;
+				isJumping = false;
+			}
+		} else {
+			moveHeight = 0;
+		}
 
         //get trig values of the current camera angle
         float angle = Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad;
@@ -31,8 +57,9 @@ public class PlayerController : MonoBehaviour {
         float adjustedHorizontal = moveHorizontal * trig1 + moveVertical * trig2;
         float adjustedVertical = moveVertical * trig1 - moveHorizontal * trig2;
         
-        Vector3 movement = Vector3.ClampMagnitude(new Vector3(adjustedHorizontal, 0, adjustedVertical), 1.0f);
-        rb.AddForce(movement * speed);
+        ///Vector3 movement = Vector3.ClampMagnitude(new Vector3(adjustedHorizontal, moveHeight, adjustedVertical), 1.0f);
+		Vector3 movement = new Vector3(adjustedHorizontal,moveHeight,adjustedVertical);
+		rb.AddForce(movement * speed);
 	}
 
 	void OnTriggerEnter(Collider other) 
