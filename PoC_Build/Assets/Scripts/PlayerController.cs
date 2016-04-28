@@ -12,18 +12,27 @@ public class PlayerController : MonoBehaviour {
 	void Start ()
 	{
 		rb = GetComponent<Rigidbody>();
-        //game = GameObject.FindGameObjectsWithTag("GameController");       //I can't figure out how to instatiate an instance of GameController
+        game = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();       //I can't figure out how to instatiate an instance of GameController
 
     }
 
 	void FixedUpdate ()
 	{
-		float moveHorizontal = Input.GetAxis ("Horizontal");
-		float moveVertical = Input.GetAxis ("Vertical");
+		float moveHorizontal = Input.GetAxis("Horizontal");
+        float moveVertical = Input.GetAxis("Vertical");
 
-		Vector3 movement = new Vector3 (moveHorizontal, 0.0f, moveVertical);
+        //get trig values of the current camera angle
+        float angle = Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad;
+        float trig1 = Mathf.Cos(angle);
+        float trig2 = Mathf.Sin(angle);
 
-		rb.AddForce (movement * speed);
+        //defines the partial vertical and horizontal sub-components of movement
+        //by adding trig-defined magnitudes
+        float adjustedHorizontal = moveHorizontal * trig1 + moveVertical * trig2;
+        float adjustedVertical = moveVertical * trig1 - moveHorizontal * trig2;
+        
+        Vector3 movement = Vector3.ClampMagnitude(new Vector3(adjustedHorizontal, 0, adjustedVertical), 1.0f);
+        rb.AddForce(movement * speed);
 	}
 
 	void OnTriggerEnter(Collider other) 
