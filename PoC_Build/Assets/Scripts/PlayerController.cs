@@ -13,7 +13,6 @@ public class PlayerController : MonoBehaviour {
 	{
 		rb = GetComponent<Rigidbody>();
         game = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();       //I can't figure out how to instatiate an instance of GameController
-
     }
 
 	void FixedUpdate ()
@@ -33,6 +32,7 @@ public class PlayerController : MonoBehaviour {
         
         Vector3 movement = Vector3.ClampMagnitude(new Vector3(adjustedHorizontal, 0, adjustedVertical), 1.0f);
         rb.AddForce(movement * speed);
+
 	}
 
 	void OnTriggerEnter(Collider other) 
@@ -55,5 +55,6 @@ public class PlayerController : MonoBehaviour {
             game.gameOverText.text = "You need " + game.minMorsels + " morsels to finish :(";
         }
 	}
+		
     
 }
