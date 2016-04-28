@@ -16,7 +16,7 @@ public class GameController : MonoBehaviour {
 
     private int totalMorsels;
     private int morselCount;
-    public bool gameOver;
+    private bool gameOver;
     private GameObject cam;
 
     void Start()
