@@ -78,6 +78,10 @@ public class GameController : MonoBehaviour {
         {
             StartCoroutine(LevelComplete());
         }
+       /* else
+        {
+            gameOverText.text = string.Format("Need {0} Morsels to advance", minMorsels-totalMorsels);
+        }*/
     }
 
     IEnumerator StartLevelMessage()
