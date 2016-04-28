@@ -11,11 +11,12 @@ public class GameController : MonoBehaviour {
     public float start_z;
     public Text morselText;
     public Text gameOverText;
+    public Text startText;
     public int minMorsels;
 
     private int totalMorsels;
     private int morselCount;
-    private bool gameOver;
+    public bool gameOver;
     private GameObject cam;
 
     void Start()
@@ -47,7 +48,10 @@ public class GameController : MonoBehaviour {
         gameOverText.text = "\n" + gameOverText.text + "\nPress Any Key to Restart";
         gameOver = true;
     }
-
+    public int MorselCount()
+    {
+        return morselCount;
+    }
     void UpdateUI()
     {
         morselText.text = string.Format("{0}/{1} Morsels", morselCount, totalMorsels);

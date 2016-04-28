@@ -12,7 +12,9 @@ public class PlayerController : MonoBehaviour {
 	void Start ()
 	{
 		rb = GetComponent<Rigidbody>();
-	}
+        //game = GameObject.FindGameObjectsWithTag("GameController");       //I can't figure out how to instatiate an instance of GameController
+
+    }
 
 	void FixedUpdate ()
 	{
@@ -34,6 +36,14 @@ public class PlayerController : MonoBehaviour {
         if (other.gameObject.CompareTag("PowerUp"))
         {
             //power up code needs to be added
+        }
+        if (other.gameObject.CompareTag("Goal") && (game.MorselCount() == game.minMorsels))
+        {
+            game.gameOver = true;
+        }
+        else if (other.gameObject.CompareTag("Goal") && (game.MorselCount() != game.minMorsels))
+        {
+            game.gameOverText.text = "You need " + game.minMorsels + " morsels to finish :(";
         }
 	}
     
