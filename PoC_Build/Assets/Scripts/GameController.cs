@@ -19,13 +19,14 @@ public class GameController : MonoBehaviour {
 
     void Start()
     {
+        morselText.text = string.Format("{0}/{1} Morsels", morselCount, totalMorsels);
         morselCount = 0;
         totalMorsels = GameObject.FindGameObjectsWithTag("Morsel").Length;
         gameOver = false;
         player = Instantiate(player, new Vector3(start_x, start_y, start_z), player.transform.rotation) as GameObject;
         cam = GameObject.FindGameObjectWithTag("MainCamera");
         cam.GetComponent<CameraController>().SetPlayer(player);
-        UpdateUI();
+        //UpdateUI();
         gameOverText.text = "";
     }
 
