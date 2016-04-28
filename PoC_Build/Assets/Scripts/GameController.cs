@@ -6,9 +6,9 @@ using UnityEngine.UI;
 public class GameController : MonoBehaviour {
 
     public GameObject player;
-    public float start_x;
-    public float start_y;
-    public float start_z;
+    public float start_x = 0;
+    public float start_y = 0;
+    public float start_z = 0;
     public Text morselText;
     public Text gameOverText;
     public Text startText;
@@ -26,7 +26,7 @@ public class GameController : MonoBehaviour {
         morselText.text = string.Format("{0}/{1} Morsels", morselCount, totalMorsels);
         minMorsels = Mathf.Clamp(minMorsels, 0, totalMorsels);
         gameOver = false;
-        player = Instantiate(player, new Vector3(start_x, start_y, start_z), player.transform.rotation) as GameObject;
+        player = Instantiate(player, new Vector3(0, 0, 0), player.transform.rotation) as GameObject;
         cam = GameObject.FindGameObjectWithTag("MainCamera");
         cam.GetComponent<CameraController>().SetPlayer(player);
         StartCoroutine(StartLevelMessage());
