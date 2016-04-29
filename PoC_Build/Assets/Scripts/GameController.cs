@@ -12,14 +12,12 @@ public class GameController : MonoBehaviour {
     public Text morselText;
     public Text gameOverText;
     public Text startText;
-    public Text timerText;
-    float currentTime = 0.0f;   // here
-
     public int minMorsels;
 
     private int totalMorsels;
     private int morselCount;
     private bool gameOver;
+	private bool displayingMessage;
     private GameObject cam;
 
     void Start()
@@ -33,6 +31,7 @@ public class GameController : MonoBehaviour {
         cam = GameObject.FindGameObjectWithTag("MainCamera");
         cam.GetComponent<CameraController>().SetPlayer(player);
         StartCoroutine(StartLevelMessage());
+		displayingMessage = false;
     }
 
     void Update()
@@ -41,7 +40,6 @@ public class GameController : MonoBehaviour {
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
-        Timer();
     }
 
     IEnumerator LevelComplete()
@@ -82,10 +80,11 @@ public class GameController : MonoBehaviour {
         {
             StartCoroutine(LevelComplete());
         }
-       /* else
+        else if (!displayingMessage)
         {
-            gameOverText.text = string.Format("Need {0} Morsels to advance", minMorsels-totalMorsels);
-        }*/
+            displayingMessage = true;
+			StartCoroutine(NotFinishedMessage());
+        }
     }
 
     IEnumerator StartLevelMessage()
@@ -94,6 +93,13 @@ public class GameController : MonoBehaviour {
         yield return new WaitForSeconds(3);
         gameOverText.text = "";
     }
+	
+	IEnumerator NotFinishedMessage() {
+		gameOverText.text = string.Format("Need {0} Morsels to Advance", minMorsels-morselCount);
+		yield return new WaitForSeconds(2);
+		gameOverText.text = "";
+		displayingMessage = false;
+	}
 
     IEnumerator GameOver()
     {
@@ -101,14 +107,5 @@ public class GameController : MonoBehaviour {
         yield return new WaitForSeconds(2);
         gameOverText.text = "\n" + gameOverText.text + "\nPress Any Key to Restart";
         gameOver = true;
-    }
-
-    void Timer() {
-		if (gameOverText.text == "Game Over") {   // change to death condition
-            currentTime = 0;        
-        } else {
-            timerText.text = "Time: " + Mathf.Round (currentTime).ToString ();
-            currentTime += Time.deltaTime;
-        }
     }
 }
