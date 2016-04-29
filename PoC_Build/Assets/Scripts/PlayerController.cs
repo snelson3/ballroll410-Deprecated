@@ -7,12 +7,16 @@ public class PlayerController : MonoBehaviour {
 	public float speed;
 	public float jump; //how long in seconds to jump
 	public float jumpScale; //How high to jump every second
+	public float upgradeAmt; //How much does the powerup increase speed
+	public float powerTime; //How long the powerup lasts in seconds
 
 	private Rigidbody rb;
     private GameController game;
 
-	private bool isJumping;
-	private float jumpStart, jumpEnd;
+	private bool isJumping, isPowered;
+	private float upgrade;
+	private float jumpEnd;
+	private float powerEnd;
 	private AudioSource audioSource;
 
 
@@ -22,7 +26,7 @@ public class PlayerController : MonoBehaviour {
         game = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();       //I can't figure out how to instatiate an instance of GameController
 		isJumping=false;
 		audioSource = GetComponent<AudioSource> ();
-
+		upgrade = 1;
     }
 
 	void FixedUpdate ()
@@ -34,7 +38,6 @@ public class PlayerController : MonoBehaviour {
 		if (!isJumping && Input.GetKeyDown ("space"))
 		{
 			isJumping = true;
-			jumpStart = Time.time;
 			jumpEnd = Time.time + jump;
 		}
 
@@ -50,6 +53,14 @@ public class PlayerController : MonoBehaviour {
 		} else {
 			moveHeight = 0;
 		}
+			
+		if (isPowered) {
+			if (Time.time > powerEnd) {
+				upgrade = 1;
+				isPowered = false;
+			}
+		}
+
 
         //get trig values of the current camera angle
         float angle = Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad;
@@ -63,7 +74,7 @@ public class PlayerController : MonoBehaviour {
         
         ///Vector3 movement = Vector3.ClampMagnitude(new Vector3(adjustedHorizontal, moveHeight, adjustedVertical), 1.0f);
 		Vector3 movement = new Vector3(adjustedHorizontal,moveHeight,adjustedVertical);
-		rb.AddForce(movement * speed);
+		rb.AddForce(movement * speed * upgrade);
 	}
 
 	void OnTriggerEnter(Collider other) 
@@ -76,7 +87,12 @@ public class PlayerController : MonoBehaviour {
 		}
 		if (other.gameObject.CompareTag("PowerUp"))
 		{
+			other.gameObject.SetActive (false);
 			//power up code needs to be added
+			isPowered = true;
+			upgrade = upgradeAmt;
+			powerEnd = Time.time + powerTime;
+			audioSource.Play ();
 		}
 		if (other.gameObject.CompareTag("Goal"))
 		{
