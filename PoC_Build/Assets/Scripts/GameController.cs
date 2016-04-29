@@ -16,7 +16,8 @@ public class GameController : MonoBehaviour {
 
     private int totalMorsels;
     private int morselCount;
-    public bool gameOver;
+    private bool gameOver;
+	private bool displayingMessage;
     private GameObject cam;
 
     void Start()
@@ -30,6 +31,7 @@ public class GameController : MonoBehaviour {
         cam = GameObject.FindGameObjectWithTag("MainCamera");
         cam.GetComponent<CameraController>().SetPlayer(player);
         StartCoroutine(StartLevelMessage());
+		displayingMessage = false;
     }
 
     void Update()
@@ -78,6 +80,11 @@ public class GameController : MonoBehaviour {
         {
             StartCoroutine(LevelComplete());
         }
+        else if (!displayingMessage)
+        {
+            displayingMessage = true;
+			StartCoroutine(NotFinishedMessage());
+        }
     }
 
     IEnumerator StartLevelMessage()
@@ -86,6 +93,13 @@ public class GameController : MonoBehaviour {
         yield return new WaitForSeconds(3);
         gameOverText.text = "";
     }
+	
+	IEnumerator NotFinishedMessage() {
+		gameOverText.text = string.Format("Need {0} Morsels to Advance", minMorsels-morselCount);
+		yield return new WaitForSeconds(2);
+		gameOverText.text = "";
+		displayingMessage = false;
+	}
 
     IEnumerator GameOver()
     {

@@ -13,12 +13,16 @@ public class PlayerController : MonoBehaviour {
 
 	private bool isJumping;
 	private float jumpStart, jumpEnd;
+	private AudioSource audioSource;
+
 
 	void Start ()
 	{
 		rb = GetComponent<Rigidbody>();
         game = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();       //I can't figure out how to instatiate an instance of GameController
 		isJumping=false;
+		audioSource = GetComponent<AudioSource> ();
+
     }
 
 	void FixedUpdate ()
@@ -68,6 +72,7 @@ public class PlayerController : MonoBehaviour {
 		{
 			other.gameObject.SetActive (false);
 			game.AddMorsel();
+			audioSource.Play ();
 		}
 		if (other.gameObject.CompareTag("PowerUp"))
 		{
