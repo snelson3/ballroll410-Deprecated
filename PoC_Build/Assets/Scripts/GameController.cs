@@ -12,6 +12,9 @@ public class GameController : MonoBehaviour {
     public Text morselText;
     public Text gameOverText;
     public Text startText;
+    public Text timerText;
+    float currentTime = 0.0f;   // here
+
     public int minMorsels;
 
     private int totalMorsels;
@@ -38,6 +41,7 @@ public class GameController : MonoBehaviour {
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
+        Timer();
     }
 
     IEnumerator LevelComplete()
@@ -97,5 +101,14 @@ public class GameController : MonoBehaviour {
         yield return new WaitForSeconds(2);
         gameOverText.text = "\n" + gameOverText.text + "\nPress Any Key to Restart";
         gameOver = true;
+    }
+
+    void Timer() {
+		if (gameOverText.text == "Game Over") {   // change to death condition
+            currentTime = 0;        
+        } else {
+            timerText.text = "Time: " + Mathf.Round (currentTime).ToString ();
+            currentTime += Time.deltaTime;
+        }
     }
 }
