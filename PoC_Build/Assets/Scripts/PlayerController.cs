@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour {
 
 	private bool isJumping, isPowered;
 	private float upgrade;
+	private bool canJump;
 	private float jumpEnd;
 	private float powerEnd;
 	private AudioSource audioSource;
@@ -29,13 +30,22 @@ public class PlayerController : MonoBehaviour {
 		upgrade = 1;
     }
 
+	void OnCollisionEnter(Collision collisionInfo) {
+		canJump = true;
+	}
+
+	void OnCollisionExit(Collision collisionInfo) {
+		canJump = false;
+	}
+
+
 	void FixedUpdate ()
 	{
 		float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
 		float moveHeight;
 
-		if (!isJumping && Input.GetKeyDown ("space"))
+		if (canJump && Input.GetKeyDown ("space"))
 		{
 			isJumping = true;
 			jumpEnd = Time.time + jump;
@@ -71,9 +81,9 @@ public class PlayerController : MonoBehaviour {
         //by adding trig-defined magnitudes
         float adjustedHorizontal = moveHorizontal * trig1 + moveVertical * trig2;
         float adjustedVertical = moveVertical * trig1 - moveHorizontal * trig2;
-        
-        ///Vector3 movement = Vector3.ClampMagnitude(new Vector3(adjustedHorizontal, moveHeight, adjustedVertical), 1.0f);
-		Vector3 movement = new Vector3(adjustedHorizontal,moveHeight,adjustedVertical);
+
+		Vector3 clampedMovement = Vector3.ClampMagnitude(new Vector3(adjustedHorizontal,moveHeight,adjustedVertical),0.8f);
+		Vector3 movement = new Vector3 (clampedMovement.x, moveHeight, clampedMovement.z);
 		rb.AddForce(movement * speed * upgrade);
 	}
 
@@ -88,7 +98,6 @@ public class PlayerController : MonoBehaviour {
 		if (other.gameObject.CompareTag("PowerUp"))
 		{
 			other.gameObject.SetActive (false);
-			//power up code needs to be added
 			isPowered = true;
 			upgrade = upgradeAmt;
 			powerEnd = Time.time + powerTime;
