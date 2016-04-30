@@ -89,7 +89,7 @@ public class PlayerController : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other) 
 	{
-		if (other.gameObject.CompareTag ( "Morsel"))
+		if (other.gameObject.CompareTag ( "Cat"))
 		{
 			other.gameObject.SetActive (false);
 			game.AddMorsel();

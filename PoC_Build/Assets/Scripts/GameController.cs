@@ -26,8 +26,8 @@ public class GameController : MonoBehaviour {
     void Start()
     {
         morselCount = 0;
-        totalMorsels = GameObject.FindGameObjectsWithTag("Morsel").Length;
-        morselText.text = string.Format("{0}/{1} Morsels", morselCount, totalMorsels);
+        totalMorsels = GameObject.FindGameObjectsWithTag("Cat").Length;
+        morselText.text = string.Format("{0}/{1} Cats", morselCount, totalMorsels);
         minMorsels = Mathf.Clamp(minMorsels, 0, totalMorsels);
         gameOver = false;
         player = Instantiate(player, new Vector3(0, 0, 0), player.transform.rotation) as GameObject;
@@ -60,7 +60,7 @@ public class GameController : MonoBehaviour {
     }
     void UpdateUI()
     {
-        morselText.text = string.Format("{0}/{1} Morsels", morselCount, totalMorsels);
+        morselText.text = string.Format("{0}/{1} Cats", morselCount, totalMorsels);
     }
 
     [SerializeField]
@@ -93,13 +93,13 @@ public class GameController : MonoBehaviour {
 
     IEnumerator StartLevelMessage()
     {
-        gameOverText.text = string.Format("Level Goal: {0}/{1} Morsels", minMorsels, totalMorsels);
+        gameOverText.text = string.Format("Level Goal: {0}/{1} Cats", minMorsels, totalMorsels);
         yield return new WaitForSeconds(3);
         gameOverText.text = "";
     }
 	
 	IEnumerator NotFinishedMessage() {
-		gameOverText.text = string.Format("Need {0} Morsels to Advance", minMorsels-morselCount);
+		gameOverText.text = string.Format("Need {0} Cats to Advance", minMorsels-morselCount);
 		yield return new WaitForSeconds(2);
 		gameOverText.text = "";
 		displayingMessage = false;
