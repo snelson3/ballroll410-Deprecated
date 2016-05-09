@@ -1,3 +1,7 @@
+# This is no longer the up to date repository, please go here instead, https://github.com/snelson3/Happy-Yarnball
+
+NOTE: This repo is being kept around as a checkpoint for our Proof of Concept build.
+
 Notes:
 There are deviations from the architecture notes in the script names and quantity. "Apply[Effect]" has been consolidated into the DestroyByContact script, and the DestroyByContact scripts will be re-written for each powerup prefab to apply the desired effects. This will be easier to manage. Also of note is that "Rotator" is now "MorselAnimator". This decision was made under the realization than any number of objects may require rotations, and so "Rotator" is too general for script management.
 
