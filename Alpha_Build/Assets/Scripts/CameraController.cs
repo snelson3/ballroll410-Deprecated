@@ -4,7 +4,8 @@ using System.Collections;
 public class CameraController : MonoBehaviour {
 
     public float speed;
-    public float distance;
+	public float minDistance;
+    public float maxDistance;
     public float start_x, start_y, start_z;
     public float max_angle;
     public float min_angle;
@@ -50,17 +51,31 @@ public class CameraController : MonoBehaviour {
             UpdateCameraPosition();
         }
     }
+	
+	float GetCameraDistance(Vector3 direction) {
+		RaycastHit hit;
+		return Physics.SphereCast(player.transform.position, 0.3f, direction, out hit, maxDistance) ? hit.distance : maxDistance;
+	}
 
     void UpdateCameraPosition()
     {
         if (player != null)
         {
             //places the camera around the player in a spherical fashion at a radius of distance
-            float height = Mathf.Sin(Mathf.Deg2Rad * transform.eulerAngles.x) * distance;
-            float x_dist = -Mathf.Sin(Mathf.Deg2Rad * transform.eulerAngles.y) * distance;
-            float z_dist = -Mathf.Cos(Mathf.Deg2Rad * transform.eulerAngles.y) * distance;
+            float height = Mathf.Sin(Mathf.Deg2Rad * transform.eulerAngles.x);
+            float x_dist = -Mathf.Sin(Mathf.Deg2Rad * transform.eulerAngles.y);
+            float z_dist = -Mathf.Cos(Mathf.Deg2Rad * transform.eulerAngles.y);
             float fact = Mathf.Cos(Mathf.Deg2Rad * transform.eulerAngles.x);
-            transform.position = player.transform.position + new Vector3(fact * x_dist, height, fact * z_dist);
+			Vector3 direction = new Vector3(fact * x_dist, height, fact * z_dist);
+			float newDistance = GetCameraDistance(direction);
+            transform.position = player.transform.position + direction * newDistance;
+			
+			if(newDistance < minDistance) {
+				player.GetComponent<Renderer>().enabled = false;
+			}
+			else {
+				player.GetComponent<Renderer>().enabled = true;
+			}
         }
     }
 
